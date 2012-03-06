@@ -47,32 +47,81 @@ FREObject getVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
 
     FREObject returnVol=nil;
     
-    /*Float32 volume;
-    UInt32 dataSize = sizeof(Float32);
-    
-    AudioSessionGetProperty (
-                             kAudioSessionProperty_CurrentHardwareOutputVolume,
-                             &dataSize,
-                             &volume
-                             );*/
     MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
     float volume = iPod.volume;
     NSLog(@"%f",volume);
-    //float volume = 0.2;
+
     FRENewObjectFromDouble(volume, &returnVol);
     return returnVol;
 }
 
 FREObject setVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
-    float volume;
-    FREGetObjectAsDouble(argv[0], (double *)&volume);
-    
+    double volume;
+    FREGetObjectAsDouble(argv[0], &volume);
+    float v = (float)volume;
     MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
-    iPod.volume = volume;
+    iPod.volume = v;
     
     return NULL;
 }
+
+FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    uint32_t functionLength;
+    const uint8_t *function;
+    FREGetObjectAsUTF8(argv[0], &functionLength, &function);
+    
+    MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
+    
+    if(strcmp((const char *)function, "stop")==0){
+        [iPod stop];
+    }
+    else if(strcmp((const char *)function, "play")==0){
+        [iPod play];
+    }
+    else if(strcmp((const char *)function, "pause")==0){
+        [iPod pause];
+    }
+    else if(strcmp((const char *)function, "goToNext")==0){
+        [iPod skipToNextItem];
+    }
+    else if(strcmp((const char *)function, "goToPrev")==0){
+        [iPod skipToPreviousItem];
+    }
+    char *str ="";
+    
+    switch ([iPod playbackState]) {
+        case MPMusicPlaybackStateInterrupted:
+            str = "MPMusicPlaybackStateInterrupted";
+            break;
+        case MPMusicPlaybackStateStopped:
+            str = "MPMusicPlaybackStateStopped";
+            break;
+            
+        case MPMusicPlaybackStatePlaying:
+            str = "MPMusicPlaybackStatePlaying";
+            break;
+        case MPMusicPlaybackStatePaused:
+            str = "MPMusicPlaybackStatePaused";
+            break;
+        case MPMusicPlaybackStateSeekingForward:
+            str = "MPMusicPlaybackStateSeekingForward";
+            break;
+        case MPMusicPlaybackStateSeekingBackward:
+            str = "MPMusicPlaybackStateSeekingBackward";
+            break;
+    }
+    
+    // Prepare for AS3
+    FREObject retStr;
+	FRENewObjectFromUTF8(strlen(str)+1, (const uint8_t*)str, &retStr);
+    
+    // Return data back to ActionScript
+	return retStr;
+
+}
+
 // ContextInitializer()
 //
 // The context initializer is called when the runtime creates the extension context instance.
@@ -80,9 +129,9 @@ void ContextInitializer(void* extData, const uint8_t * ctxType, FREContext ctx,
 						uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {
 
-	*numFunctionsToTest = 6;
+	*numFunctionsToTest = 7;
     
-	FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * 6);
+	FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * 7);
     
     func[0].name = (const uint8_t*)"init";
     func[0].functionData = NULL;
@@ -107,6 +156,10 @@ void ContextInitializer(void* extData, const uint8_t * ctxType, FREContext ctx,
     func[5].name = (const uint8_t*)"setVolume";
     func[5].functionData = NULL;
     func[5].function = &setVolume;
+    
+    func[6].name = (const uint8_t*)"Ipod";
+    func[6].functionData = NULL;
+    func[6].function = &Ipod;
     
 	*functionsToSet = func;
 }

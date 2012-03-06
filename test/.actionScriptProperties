@@ -28,7 +28,7 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="libs"/>
-      <libraryPathEntry kind="5" linkType="2" path="/Users/mmmackowiak/Documents/git/SoundExtension/build/release/SoundExtension.ane"/>
+      <libraryPathEntry kind="5" linkType="2" path="/Users/mmmackowiak/Documents/git/SoundExtension/SoundExtension/build/release/SoundExtension.ane"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
@@ -46,14 +46,14 @@
       <airSettings airCertificatePath="/Users/mmmackowiak/Documents/Adobe Flash Builder 4.6/CERTYFIKATY/iphone_dev.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths>
-          <anePathEntry path="/Users/mmmackowiak/Documents/git/SoundExtension/build/release/SoundExtension.ane"/>
+          <anePathEntry path="/Users/mmmackowiak/Documents/git/SoundExtension/SoundExtension/build/release/SoundExtension.ane"/>
         </anePaths>
       </airSettings>
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget airDownloadURL="" androidSettingsVersion="1" buildTargetName="com.adobe.flexide.multiplatform.android.platform">
       <multiPlatformSettings enabled="true" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" version="2"/>
-      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
+      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes/>
         <anePaths/>
       </airSettings>
@@ -65,6 +65,14 @@
         <airExcludes/>
         <anePaths/>
       </airSettings>
+      <actionScriptSettings version="1"/>
+    </buildTarget>
+    <buildTarget buildTargetName="com.qnx.flexide.multiplatform.qnx.platform" extraPackagingOptions="" signBarFile="false">
+      <airSettings airCertificatePath="" airTimestamp="true" anePathSet="true" version="1">
+        <airExcludes/>
+        <anePaths/>
+      </airSettings>
+      <multiPlatformSettings enabled="false" includePlatformLibs="false" platformID="com.qnx.flexide.multiplatform.qnx.platform" version="2"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
   </buildTargets>

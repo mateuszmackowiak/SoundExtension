@@ -8,6 +8,7 @@
 			
 			import pl.mateuszmackowiak.nativeANE.SoundExtension;
 			private var soundExt:SoundExtension;
+
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
@@ -31,13 +32,58 @@
 				soundExt.dispose();
 			}
 			
+			protected function clickHandler(value:String):void
+			{
+				switch(value)
+				{
+					case "play":
+					{
+						statusArea.appendText("IPOD STATE:"+soundExt.start());
+						break;
+					}
+						
+					case "stop":
+					{
+						statusArea.appendText("IPOD STATE:"+soundExt.stopIpod());
+						break;
+					}
+					case "pause":
+					{
+					statusArea.appendText("IPOD STATE:"+soundExt.pauseIpod());
+						break;
+					}
+					case "next":
+					{
+					statusArea.appendText("IPOD STATE:"+soundExt.goToNext());
+						break;
+					}
+					case "prev":
+					{
+						statusArea.appendText("IPOD STATE:"+soundExt.goToPrev());
+						break;
+					}
+				}
+			}
+			
+			
 		]]>
 	</fx:Script>
 	
 	<fx:Declarations>
 		<!-- Place non-visual elements (e.g., services, value objects) here -->
 	</fx:Declarations>
-	
+	<s:layout>
+		<s:VerticalLayout/>
+	</s:layout>
+	<s:HGroup width="100%">
+		<s:Button width="100%" click="clickHandler('play')" label="play"/>
+		<s:Button width="100%" click="clickHandler('stop')" label="stop"/>
+		<s:Button width="100%" click="clickHandler('pause')" label="pause"/>
+	</s:HGroup>
+	<s:HGroup width="100%">
+		<s:Button click="clickHandler('next')" label="go to next" width="100%"/>
+		<s:Button click="clickHandler('prev')" label="go to prev" width="100%"/>
+	</s:HGroup>
 	
 	<s:TextArea id="statusArea" width="100%" height="100%"/>
 </s:View>

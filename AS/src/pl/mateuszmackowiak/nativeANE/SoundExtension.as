@@ -4,6 +4,7 @@ package pl.mateuszmackowiak.nativeANE
 	import flash.events.IEventDispatcher;
 	import flash.events.StatusEvent;
 	import flash.external.ExtensionContext;
+	import flash.system.Capabilities;
 	
 	public class SoundExtension extends EventDispatcher
 	{
@@ -54,6 +55,44 @@ package pl.mateuszmackowiak.nativeANE
 			if (!_context) {
 				_context.dispose();
 			}
+		}
+		
+		public static function isSupported():Boolean
+		{
+			if(Capabilities.os.toLowerCase().indexOf("ip")>-1)
+				return true;
+			return false;
+		}
+		
+		public function stopIpod():String
+		{
+			if (_context)
+				return _context.call("Ipod","stop") as String;
+			return null;
+		}
+		public function playIpod():String
+		{
+			if (_context)
+				return _context.call("Ipod","play") as String;
+			return null;
+		}
+		public function pauseIpod():String
+		{
+			if (_context)
+				return _context.call("Ipod","pause") as String;
+			return null;
+		}
+		public function goToNext():String
+		{
+			if (_context)
+				return _context.call("Ipod","goToNext") as String;
+			return null;
+		}
+		public function goToPrev():String
+		{
+			if (_context)
+				return _context.call("Ipod","goToPrev") as String;
+			return null;
 		}
 	}
 }
