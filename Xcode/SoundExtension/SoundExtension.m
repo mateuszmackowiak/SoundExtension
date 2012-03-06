@@ -58,6 +58,7 @@ FREObject getVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
     
     MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
     float volume = iPod.volume;
+    [iPod release];
     NSLog(@"%f",volume);
 
     FRENewObjectFromDouble(volume, &returnVol);
@@ -76,6 +77,8 @@ FREObject setVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
         [iPod setVolume: volume];
     }
     volume = iPod.volume;
+    [iPod release];
+    
     NSLog(@"%f",volume);
     
     FRENewObjectFromDouble(volume, &returnVol);
@@ -114,7 +117,6 @@ FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
         case MPMusicPlaybackStateStopped:
             str = "stopped";
             break;
-            
         case MPMusicPlaybackStatePlaying:
             str = "playing";
             break;
@@ -128,7 +130,7 @@ FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
             str = "seekingBackward";
             break;
     }
-    
+
     // Prepare for AS3
     FREObject retStr;
 	FRENewObjectFromUTF8(strlen(str)+1, (const uint8_t*)str, &retStr);
