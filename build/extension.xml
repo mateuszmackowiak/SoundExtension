@@ -1,0 +1,16 @@
+<extension xmlns="http://ns.adobe.com/air/extension/2.5">
+    <id>pl.mateuszmackowiak.nativeANE.SoundExtension</id>
+    <versionNumber>0.6</versionNumber>
+    <platforms>
+        <platform name="iPhone-ARM">
+            <applicationDeployment>
+                <nativeLibrary>libSoundExtension.a</nativeLibrary>
+                <initializer>ExtInitializer</initializer>
+                <finalizer>ExtFinalizer</finalizer>
+            </applicationDeployment>
+        </platform>
+        <platform name="default"> 
+            <applicationDeployment/> 
+        </platform>
+    </platforms>
+</extension>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Sound Extension Demo" creationComplete="creationCompleteHandler(event)" >
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import pl.mateuszmackowiak.nativeANE.SoundExtension;
+			private var soundExt:SoundExtension;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				soundExt = new SoundExtension();
+				soundExt.addEventListener(StatusEvent.STATUS,onStatus);
+				soundExt.start();
+				
+				soundExt.volume=0.1;
+				statusArea.appendText("volume is   "+soundExt.volume+"\n");
+				NativeApplication.nativeApplication.addEventListener(Event.EXITING,exiting);
+			}
+			
+			protected function onStatus(event:StatusEvent):void
+			{
+				statusArea.appendText(event.code+"    "+event.level+"\n");
+			}
+			
+			protected function exiting(event:Event):void
+			{
+				soundExt.stop();
+				soundExt.dispose();
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	
+	
+	<s:TextArea id="statusArea" width="100%" height="100%"/>
+</s:View>
