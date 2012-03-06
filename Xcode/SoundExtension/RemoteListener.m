@@ -3,7 +3,7 @@
 //  SoundExtension
 //
 //  Created by Mateusz Mackowiak on 05.03.2012.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 mateuszmackowiak. All rights reserved.
 //
 #import <UIKit/UIKit.h>
 #import "FlashRuntimeExtensions.h"
@@ -12,6 +12,7 @@
 
 static const char * REMOTE_CHANGE = "remoteControlChange";
 static const char * VOLUME_CHANGED = "volumeChanged";
+
 
 @implementation RemoteListener
 
@@ -31,13 +32,18 @@ static const char * VOLUME_CHANGED = "volumeChanged";
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     [self becomeFirstResponder];
     
+    
+
     [[NSNotificationCenter defaultCenter]
      addObserver:self
      selector:@selector(volumeChanged:)
      name:@"AVSystemController_SystemVolumeDidChangeNotification"
      object:nil];
+    
 }
 
+
+ 
 
 - (void)volumeChanged:(NSNotification *)notification
 {
@@ -80,7 +86,7 @@ static const char * VOLUME_CHANGED = "volumeChanged";
             FREDispatchStatusEventAsync(context, (const uint8_t*)REMOTE_CHANGE, (const uint8_t*)"remoteControlBeginSeekingBackward");
             break;
         case UIEventSubtypeRemoteControlBeginSeekingForward:
-            FREDispatchStatusEventAsync(context, (const uint8_t*)REMOTE_CHANGE, (const uint8_t*)"remoteControlBeginSeekingForward");
+           FREDispatchStatusEventAsync(context, (const uint8_t*)REMOTE_CHANGE, (const uint8_t*)"remoteControlBeginSeekingForward");
             break;
         default:
             break;
@@ -94,8 +100,6 @@ static const char * VOLUME_CHANGED = "volumeChanged";
 {
     [[UIApplication sharedApplication] endReceivingRemoteControlEvents];
     [self resignFirstResponder];
-    
-    
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 

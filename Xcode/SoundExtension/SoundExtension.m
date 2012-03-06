@@ -9,7 +9,8 @@
 #include <MediaPlayer/MPMusicPlayerController.h>
 #include "FlashRuntimeExtensions.h"
 #include "RemoteListener.h"
-
+#include <AudioToolbox/AudioServices.h>
+#include "PlaybackListener.h"
 
 FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[] ){
     FREObject retVal;
@@ -23,23 +24,31 @@ FREObject isSupported(FREContext ctx, void* funcData, uint32_t argc, FREObject a
 
 
 RemoteListener *remoteListener;
-
+PlaybackListener *playbackListener;
 
 FREObject ext_init(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     remoteListener = [[[RemoteListener alloc] retain] initWithContext:ctx];
+    playbackListener = [[[PlaybackListener alloc] retain] initWithContext:ctx];
     return NULL;
 }
 
 FREObject ext_startListening(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     [remoteListener startListening];
+    [playbackListener startListening];
     return NULL;
 }
+
+
+
+
 
 FREObject ext_stopListening(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     [remoteListener stopListening];
+   
+    [playbackListener stopListening];
     return NULL;
 }
 FREObject getVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -58,12 +67,19 @@ FREObject getVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject arg
 FREObject setVolume(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 {
     double volume;
-    FREGetObjectAsDouble(argv[0], &volume);
-    float v = (float)volume;
-    MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
-    iPod.volume = v;
+    FREObject returnVol=nil;
     
-    return NULL;
+    FREGetObjectAsDouble(argv[0], &volume);
+
+    MPMusicPlayerController *iPod = [MPMusicPlayerController iPodMusicPlayer];
+    if(volume<=1 || volume>=0){
+        [iPod setVolume: volume];
+    }
+    volume = iPod.volume;
+    NSLog(@"%f",volume);
+    
+    FRENewObjectFromDouble(volume, &returnVol);
+    return returnVol;
 }
 
 FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
@@ -93,23 +109,23 @@ FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
     
     switch ([iPod playbackState]) {
         case MPMusicPlaybackStateInterrupted:
-            str = "MPMusicPlaybackStateInterrupted";
+            str = "interrupted";
             break;
         case MPMusicPlaybackStateStopped:
-            str = "MPMusicPlaybackStateStopped";
+            str = "stopped";
             break;
             
         case MPMusicPlaybackStatePlaying:
-            str = "MPMusicPlaybackStatePlaying";
+            str = "playing";
             break;
         case MPMusicPlaybackStatePaused:
-            str = "MPMusicPlaybackStatePaused";
+            str = "paused";
             break;
         case MPMusicPlaybackStateSeekingForward:
-            str = "MPMusicPlaybackStateSeekingForward";
+            str = "seekingForward";
             break;
         case MPMusicPlaybackStateSeekingBackward:
-            str = "MPMusicPlaybackStateSeekingBackward";
+            str = "seekingBackward";
             break;
     }
     
@@ -122,6 +138,31 @@ FREObject Ipod(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
 
 }
 
+
+
+FREObject getAudioRoute(FREContext ctx, void* funcData, uint32_t argc, FREObject argv[])
+{
+    
+    UInt32 routeSize = sizeof(CFStringRef);
+    CFStringRef route;
+    AudioSessionInitialize(NULL, NULL, NULL, NULL);
+    OSStatus error = AudioSessionGetProperty(kAudioSessionProperty_AudioRoute,&routeSize,&route);
+    
+    if(!error && (route !=NULL)){
+        NSString* routeStr = (NSString*)route;
+        const char *str =[routeStr UTF8String];
+        // Prepare for AS3
+        FREObject retStr;
+        FRENewObjectFromUTF8(strlen(str)+1, (const uint8_t*)str, &retStr);
+        
+        // Return data back to ActionScript
+        return retStr;
+    }
+    return NULL;
+}
+
+
+
 // ContextInitializer()
 //
 // The context initializer is called when the runtime creates the extension context instance.
@@ -129,9 +170,9 @@ void ContextInitializer(void* extData, const uint8_t * ctxType, FREContext ctx,
 						uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet) 
 {
 
-	*numFunctionsToTest = 7;
+	*numFunctionsToTest = 8;
     
-	FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * 7);
+	FRENamedFunction* func = (FRENamedFunction*) malloc(sizeof(FRENamedFunction) * 8);
     
     func[0].name = (const uint8_t*)"init";
     func[0].functionData = NULL;
@@ -161,6 +202,10 @@ void ContextInitializer(void* extData, const uint8_t * ctxType, FREContext ctx,
     func[6].functionData = NULL;
     func[6].function = &Ipod;
     
+    func[7].name = (const uint8_t*)"getAudioRoute";
+    func[7].functionData = NULL;
+    func[7].function = &getAudioRoute;
+    
 	*functionsToSet = func;
 }
 
@@ -180,6 +225,10 @@ void ContextFinalizer(FREContext ctx) {
         [remoteListener stopListening];
         [remoteListener dealloc];
     }
+    if(playbackListener){
+        [playbackListener stopListening];
+        [playbackListener dealloc];
+    }
     NSLog(@"Exiting ContextFinalizer()");
     
 	return;
@@ -190,7 +239,7 @@ void ContextFinalizer(FREContext ctx) {
 // The extension initializer is called the first time the ActionScript side of the extension
 // calls ExtensionContext.createExtensionContext() for any context.
 
-void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, 
+void ExtSoundExtensionInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, 
                     FREContextFinalizer* ctxFinalizerToSet) {
     
     NSLog(@"Entering ExtInitializer()");
@@ -206,7 +255,7 @@ void ExtInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerTo
 //
 // The extension finalizer is called when the runtime unloads the extension. However, it is not always called.
 
-void ExtFinalizer(void* extData) {
+void ExtSoundExtensionFinalizer(void* extData) {
     
     NSLog(@"Entering ExtFinalizer()");
     

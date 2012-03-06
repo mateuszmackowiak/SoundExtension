@@ -6,26 +6,33 @@
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
-			import pl.mateuszmackowiak.nativeANE.SoundExtension;
+			import pl.mateuszmackowiak.nativeANE.sound.SoundExtension;
+			import pl.mateuszmackowiak.nativeANE.sound.event.DeviceVolumeChangeEvent;
+			import pl.mateuszmackowiak.nativeANE.sound.event.SoundExtensionEvent;
 			private var soundExt:SoundExtension;
 
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				soundExt = new SoundExtension();
+				soundExt.addEventListener(SoundExtensionEvent.IPOD_STATE_CHANGED,onStatus);
+				soundExt.addEventListener(SoundExtensionEvent.REMOTE_CHANGE,onStatus);
+				soundExt.addEventListener(DeviceVolumeChangeEvent.VOLUME_CHANGED,onVolumeChange);
 				soundExt.addEventListener(StatusEvent.STATUS,onStatus);
 				soundExt.start();
-				
-				soundExt.volume=0.1;
-				statusArea.appendText("volume is   "+soundExt.volume+"\n");
+				statusArea.appendText("volume is   "+soundExt.setVolume(0.1)+"\n");
+				statusArea.appendText("AudioRoute is   "+soundExt.getAudioRoute()+"\n");
 				NativeApplication.nativeApplication.addEventListener(Event.EXITING,exiting);
 			}
 			
-			protected function onStatus(event:StatusEvent):void
+			protected function onStatus(event:SoundExtensionEvent):void
 			{
-				statusArea.appendText(event.code+"    "+event.level+"\n");
+				statusArea.appendText(event.type+"    "+event.level+"\n");
 			}
-			
+			protected function onVolumeChange(event:DeviceVolumeChangeEvent):void
+			{
+				statusArea.appendText(event.type+"    "+event.volume+"\n");
+			}
 			protected function exiting(event:Event):void
 			{
 				soundExt.stop();
@@ -38,28 +45,28 @@
 				{
 					case "play":
 					{
-						statusArea.appendText("IPOD STATE:"+soundExt.playIpod());
+						statusArea.appendText("IPOD STATE:"+soundExt.playIpod()+"\n");
 						break;
 					}
 						
 					case "stop":
 					{
-						statusArea.appendText("IPOD STATE:"+soundExt.stopIpod());
+						statusArea.appendText("IPOD STATE:"+soundExt.stopIpod()+"\n");
 						break;
 					}
 					case "pause":
 					{
-					statusArea.appendText("IPOD STATE:"+soundExt.pauseIpod());
+					statusArea.appendText("IPOD STATE:"+soundExt.pauseIpod()+"\n");
 						break;
 					}
 					case "next":
 					{
-					statusArea.appendText("IPOD STATE:"+soundExt.goToNext());
+					statusArea.appendText("IPOD STATE:"+soundExt.goToNext()+"\n");
 						break;
 					}
 					case "prev":
 					{
-						statusArea.appendText("IPOD STATE:"+soundExt.goToPrev());
+						statusArea.appendText("IPOD STATE:"+soundExt.goToPrev()+"\n");
 						break;
 					}
 				}

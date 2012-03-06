@@ -262,6 +262,10 @@
 				<string>1</string>
 				<string>2</string>
 			</array>
+			<key>UIBackgroundModes</key>
+			<array>
+				<string>audio</string>
+			</array>
 		]]></InfoAdditions>
         <requestedDisplayResolution>high</requestedDisplayResolution>
     </iPhone>

@@ -19,6 +19,9 @@
 		9AF11E29150574C2007E0593 /* RemoteListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF11E27150574C2007E0593 /* RemoteListener.h */; };
 		9AF11E2A150574C2007E0593 /* RemoteListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF11E28150574C2007E0593 /* RemoteListener.m */; };
 		9AF11E3515059C0B007E0593 /* MediaPlayer.framework in Sources */ = {isa = PBXBuildFile; fileRef = 9AF11E3415059C0B007E0593 /* MediaPlayer.framework */; };
+		9AF344AA1506216700EF79C3 /* AudioToolbox.framework in Sources */ = {isa = PBXBuildFile; fileRef = 9AF344A91506216600EF79C3 /* AudioToolbox.framework */; };
+		9AF344AE15062C7200EF79C3 /* PlaybackListener.h in Headers */ = {isa = PBXBuildFile; fileRef = 9AF344AC15062C7200EF79C3 /* PlaybackListener.h */; };
+		9AF344AF15062C7200EF79C3 /* PlaybackListener.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AF344AD15062C7200EF79C3 /* PlaybackListener.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +51,9 @@
 		9AF11E27150574C2007E0593 /* RemoteListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RemoteListener.h; sourceTree = "<group>"; };
 		9AF11E28150574C2007E0593 /* RemoteListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RemoteListener.m; sourceTree = "<group>"; };
 		9AF11E3415059C0B007E0593 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		9AF344A91506216600EF79C3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		9AF344AC15062C7200EF79C3 /* PlaybackListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackListener.h; sourceTree = "<group>"; };
+		9AF344AD15062C7200EF79C3 /* PlaybackListener.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaybackListener.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,7 @@
 		9AF11DED150571E4007E0593 = {
 			isa = PBXGroup;
 			children = (
+				9AF344A91506216600EF79C3 /* AudioToolbox.framework */,
 				9AF11E3415059C0B007E0593 /* MediaPlayer.framework */,
 				9AF11E251505730A007E0593 /* FlashRuntimeExtensions.h */,
 				9AF11DFD150571E4007E0593 /* SoundExtension */,
@@ -112,6 +119,8 @@
 				9AF11E27150574C2007E0593 /* RemoteListener.h */,
 				9AF11E28150574C2007E0593 /* RemoteListener.m */,
 				9AF11DFE150571E4007E0593 /* Supporting Files */,
+				9AF344AC15062C7200EF79C3 /* PlaybackListener.h */,
+				9AF344AD15062C7200EF79C3 /* PlaybackListener.m */,
 			);
 			path = SoundExtension;
 			sourceTree = "<group>";
@@ -152,6 +161,7 @@
 			files = (
 				9AF11E261505730A007E0593 /* FlashRuntimeExtensions.h in Headers */,
 				9AF11E29150574C2007E0593 /* RemoteListener.h in Headers */,
+				9AF344AE15062C7200EF79C3 /* PlaybackListener.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,8 +263,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AF11E3515059C0B007E0593 /* MediaPlayer.framework in Sources */,
+				9AF344AA1506216700EF79C3 /* AudioToolbox.framework in Sources */,
 				9AF11E02150571E4007E0593 /* SoundExtension.m in Sources */,
 				9AF11E2A150574C2007E0593 /* RemoteListener.m in Sources */,
+				9AF344AF15062C7200EF79C3 /* PlaybackListener.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
