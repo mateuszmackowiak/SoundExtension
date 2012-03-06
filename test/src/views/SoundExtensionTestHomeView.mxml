@@ -38,7 +38,7 @@
 				{
 					case "play":
 					{
-						statusArea.appendText("IPOD STATE:"+soundExt.start());
+						statusArea.appendText("IPOD STATE:"+soundExt.playIpod());
 						break;
 					}
 						
